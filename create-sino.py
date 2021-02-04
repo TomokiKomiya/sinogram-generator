@@ -98,8 +98,18 @@ def saveImage(data, path, x, y, z):
     data.tofile('./{0}-uint16_{1}x{2}x{3}.raw'.format(path, x, y, z))
     return '{0}-uint16_{1}x{2}x{3}.raw'.format(path, x, y, z)
 
-def main(sphere_c, sphere_start, sphere_end, x_ray, detecta_sdd_x, detecta_w, detecta_h, projection_num, output_path):
+def main(setting):
     start = time.time()
+    # input
+    sphere_c = setting['sphere_c']
+    sphere_start = setting['sphere_start']
+    sphere_end = setting['sphere_end']
+    x_ray = setting['x_ray']
+    detecta_sdd_x = setting['detecta_sdd_x']
+    detecta_w = setting['detecta_w']
+    detecta_h = setting['detecta_h']
+    projection_num = setting['projection_num']
+    output_path = setting['output_path']
     create_dir(output_path)
     # 変形幅
     deformation = sphere_end - sphere_start
@@ -145,34 +155,4 @@ if __name__ == '__main__':
     with open('setting.yml', 'r') as yml:
         setting = yaml.load(yml, Loader=yaml.SafeLoader)
 
-    # input
-    sphere_c = setting['sphere_c']
-    sphere_start = setting['sphere_start']
-    sphere_end = setting['sphere_end']
-    x_ray = setting['x_ray']
-
-    detecta_sdd_x = setting['detecta_sdd_x']
-    detecta_w = setting['detecta_w']
-    detecta_h = setting['detecta_h']
-
-    projection_num = setting['projection_num']
-
-    # 出力するDir
-    output_path = setting['output_path']
-
-    # # input
-    # sphere_c = [400, 0, 0]
-    # sphere_start = 30
-    # sphere_end = 35
-    # x_ray = [0, 0, 0]
-
-    # detecta_sdd_x = 1500
-    # detecta_w = 1024
-    # detecta_h = 1024
-
-    # projection_num = 1000
-
-    # # 出力するDir
-    # output_path = 'sphere-r30to35'
-
-    main(sphere_c, sphere_start, sphere_end, x_ray, detecta_sdd_x, detecta_w, detecta_h, projection_num, output_path)
+    main(setting)
