@@ -1,0 +1,8 @@
+start : 2021-02-04 22:26:41.948957
+X-ray source position: [0, 0, 0]
+Distance to the detector: 1500
+Distance to the object: 400
+Detector panel size: 512x512
+Sphere radius (start): 30
+Sphere radius (end): 35
+Number of projections: 1000

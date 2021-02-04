@@ -1,8 +1,42 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import math
 from scipy.spatial import distance
 import numpy as np
 from tqdm import tqdm
 import time
+import datetime
+import sys
+import os
+import yaml
+
+def create_dir(dir):
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    return 'ok'
+
+def write_note_start(sphere_c, sphere_start, sphere_end, x_ray, detecta_sdd_x, detecta_w, detecta_h, projection_num, output_path):
+    path = os.path.join(output_path, '{0}_{1}x{2}x{3}_data.txt'.format(output_path, detecta_w, detecta_h, projection_num))
+    data = open(path, 'w+')
+    data.write("start : " + str(datetime.datetime.now()))
+    data.write("\nX-ray source position: {0}".format(x_ray))
+    data.write("\nDistance to the detector: {0}".format(detecta_sdd_x))
+    data.write("\nDistance to the object: {0}".format(sphere_c[0]))
+    data.write("\nDetector panel size: {0}x{1}".format(detecta_w, detecta_h))
+    data.write("\nSphere radius (start): {0}".format(sphere_start))
+    data.write("\nSphere radius (end): {0}".format(sphere_end))
+    data.write("\nNumber of projections: {0}".format(projection_num))
+    data.close()
+    return 'ok'
+
+def write_note_end(file_name, elapsed_time, output_path, detecta_w, detecta_h, projection_num):
+    path = os.path.join(output_path, '{0}_{1}x{2}x{3}_data.txt'.format(output_path, detecta_w, detecta_h, projection_num))
+    data = open(path, 'a')
+    data.write("\nSave file name: {0}".format(file_name))
+    data.write("\ncreated: " + str(datetime.datetime.now()))
+    data.write("\nelapsed_time: {0}".format(elapsed_time) + "[sec]")
+    data.close()
 
 def get_cross_point(sphere, r, detecta, x_ray):
     params = []
@@ -60,29 +94,17 @@ def min_max(x, axis=None):
     return (x - x_min) / (x_max - x_min)
 
 def saveImage(data, path, x, y, z):
+    path = os.path.join(path, path)
     data.tofile('./{0}-uint16_{1}x{2}x{3}.raw'.format(path, x, y, z))
+    return '{0}-uint16_{1}x{2}x{3}.raw'.format(path, x, y, z)
 
-
-if __name__ == '__main__':
-    # input
-    sphere_c = [400, 0, 0]
-    sphere_start = 30
-    sphere_end = 35
-    detecta_pitch = 1
-    x_ray = [0, 0, 0]
-
-    detecta_sdd_x = 1500
-    detecta_w = 512
-    detecta_h = 512
-
-    projection_num = 500
-
+def main(sphere_c, sphere_start, sphere_end, x_ray, detecta_sdd_x, detecta_w, detecta_h, projection_num, output_path):
+    start = time.time()
+    create_dir(output_path)
+    # 変形幅
     deformation = sphere_end - sphere_start
     step = deformation / projection_num
-    print(step)
-
-    output_path = './sphere-r30to35'
-
+    write_note_start(sphere_c, sphere_start, sphere_end, x_ray, detecta_sdd_x, detecta_w, detecta_h, projection_num, output_path)
     # output
     sinogram = []
     for d in tqdm(range(projection_num)):
@@ -111,4 +133,46 @@ if __name__ == '__main__':
         sinogram[i] = convert_transparent(data)
 
     sinogram = sinogram.astype(np.uint16)
-    saveImage(sinogram, output_path, detecta_w, detecta_h, projection_num)
+    file_name = saveImage(sinogram, output_path, detecta_w, detecta_h, projection_num)
+    elapsed_time = time.time() - start
+    write_note_end(file_name, elapsed_time, output_path, detecta_w, detecta_h, projection_num)
+    print("elapsed_time:{0}".format(elapsed_time) + "[sec]")
+
+
+
+if __name__ == '__main__':
+
+    with open('setting.yml', 'r') as yml:
+        setting = yaml.load(yml, Loader=yaml.SafeLoader)
+
+    # input
+    sphere_c = setting['sphere_c']
+    sphere_start = setting['sphere_start']
+    sphere_end = setting['sphere_end']
+    x_ray = setting['x_ray']
+
+    detecta_sdd_x = setting['detecta_sdd_x']
+    detecta_w = setting['detecta_w']
+    detecta_h = setting['detecta_h']
+
+    projection_num = setting['projection_num']
+
+    # 出力するDir
+    output_path = setting['output_path']
+
+    # # input
+    # sphere_c = [400, 0, 0]
+    # sphere_start = 30
+    # sphere_end = 35
+    # x_ray = [0, 0, 0]
+
+    # detecta_sdd_x = 1500
+    # detecta_w = 1024
+    # detecta_h = 1024
+
+    # projection_num = 1000
+
+    # # 出力するDir
+    # output_path = 'sphere-r30to35'
+
+    main(sphere_c, sphere_start, sphere_end, x_ray, detecta_sdd_x, detecta_w, detecta_h, projection_num, output_path)

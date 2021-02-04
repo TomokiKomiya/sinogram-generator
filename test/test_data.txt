@@ -1,0 +1,14 @@
+start : 2021-02-04 22:24:45.684409
+X-ray source position: [0, 0, 0]
+Distance to the detector: 1500
+Distance to the object: 400
+Detector panel size: 512x512
+Sphere radius (start): 30
+Sphere radius (end): 35
+Number of projections: 1
+Save file name: test\test-uint16_512x512x1.raw
+created: 2021-02-04 22:24:46.990411
+elapsed_time: 1.3060011863708496[sec]
+Save file name: test\test-uint16_1024x1024x1.raw
+created: 2021-02-04 23:00:02.670597
+elapsed_time: 3.749030113220215[sec]
