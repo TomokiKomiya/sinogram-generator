@@ -6,3 +6,6 @@ Detector panel size: 512x512
 Sphere radius (start): 30
 Sphere radius (end): 35
 Number of projections: 1000
+Save file name: sphere-r30to35\sphere-r30to35-uint16_512x512x1000.raw
+created: 2021-02-04 23:44:38.527528
+elapsed_time: 3858.5315730571747[sec]
