@@ -15,3 +15,19 @@ CT再構成で用いる透過像のデータ生成用ファイル
     projection_num: 1000 # 投影枚数
     output_path: 'dir-name' # 出力するDir
     ```
+
+## projection image to sinogram
+1. create projection image directory
+2. run code
+    ```
+    $ python ./projection_to_sino.py -f ./lobster-1projection/lobster-sino-31744_32768-float32_1024x1024x1024.raw -o ./lobster-1sinogram/lobster-31744_32768-uint16 
+    ```
+
+# Rawデータのファイル分け
+
+連続してスキャンされたデータを1Frameごとにまとめるファイル
+
+## 対象ファイル
+```
+$ python devide_raw.py
+```
