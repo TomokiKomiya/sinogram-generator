@@ -1,5 +1,7 @@
 
-
 *.raw
 setting.yml
 *.txt
+*.png
+*.jpg
+

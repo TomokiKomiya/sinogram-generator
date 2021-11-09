@@ -94,6 +94,8 @@ def min_max(x, axis=None):
     return (x - x_min) / (x_max - x_min)
 
 def saveImage(data, path, x, y, z):
+    print(type(data))
+    print(data.dtype)
     path = os.path.join(path, path)
     data.tofile('./{0}-uint16_{1}x{2}x{3}.raw'.format(path, x, y, z))
     return '{0}-uint16_{1}x{2}x{3}.raw'.format(path, x, y, z)
